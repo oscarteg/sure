@@ -44,6 +44,7 @@ class Family::FinancialDataReset
   PROVIDER_ITEM_ASSOCIATIONS = %i[
     binance_items
     brex_items
+    bunq_items
     coinbase_items
     coinstats_items
     enable_banking_items

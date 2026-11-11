@@ -7,6 +7,7 @@ class Provider
       lunchflow:      { region: "Global",  kinds: %w[Bank],            maturity: :stable, logo_text: "LF", logo_color: "#f97316", domain: "lunchflow.app" },
       up:             { region: "AU",      kinds: %w[Bank],            maturity: :beta,   logo_text: "UP", logo_color: "#ea580c", domain: "up.com.au" },
       monobank:       { region: "UA",      kinds: %w[Bank],            maturity: :alpha,  logo_text: "MB", logo_color: "#111827", domain: "monobank.ua" },
+      bunq:           { region: "EU",      kinds: %w[Bank],            maturity: :alpha,  logo_text: "BQ", logo_color: nil, domain: "bunq.com", name: "bunq" },
       fio:            { region: "CZ",      kinds: %w[Bank],            maturity: :alpha,  logo_text: "FI", logo_color: "#1d4ed8", domain: "fio.cz", name: "Fio banka" },
       enable_banking: { region: "EU",      kinds: %w[Bank],            maturity: :beta,   logo_text: "EB", logo_color: "#9333ea", domain: "enablebanking.com" },
       truelayer:      { region: "UK",      kinds: %w[Bank],            maturity: :alpha,  logo_text: "TL", logo_color: "#0f172a", domain: "truelayer.com", name: "TrueLayer" },

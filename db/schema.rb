@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_01_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_11_141500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -401,6 +401,53 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_120000) do
     t.index ["family_id", "start_date", "end_date"], name: "index_budgets_shared_unique", unique: true, where: "(user_id IS NULL)"
     t.index ["family_id"], name: "index_budgets_on_family_id"
     t.index ["user_id"], name: "index_budgets_on_user_id"
+  end
+
+  create_table "bunq_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "bunq_item_id", null: false
+    t.string "account_id", null: false
+    t.string "name", null: false
+    t.string "currency", null: false
+    t.decimal "current_balance", precision: 19, scale: 4
+    t.string "account_status"
+    t.string "account_type"
+    t.string "provider", default: "bunq"
+    t.boolean "ignored", default: false, null: false
+    t.date "sync_start_date"
+    t.jsonb "institution_metadata"
+    t.jsonb "raw_payload"
+    t.jsonb "raw_transactions_payload"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bunq_item_id", "account_id"], name: "index_bunq_accounts_on_bunq_item_id_and_account_id", unique: true
+    t.index ["bunq_item_id"], name: "index_bunq_accounts_on_bunq_item_id"
+  end
+
+  create_table "bunq_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "name", null: false
+    t.text "api_key", null: false
+    t.string "environment", default: "production", null: false
+    t.string "user_id"
+    t.text "private_key"
+    t.text "installation_token"
+    t.text "server_public_key"
+    t.text "device_id"
+    t.string "institution_id", default: "bunq"
+    t.string "institution_name", default: "bunq"
+    t.string "institution_domain", default: "bunq.com"
+    t.string "institution_url", default: "https://bunq.com"
+    t.string "institution_color"
+    t.string "status", default: "good", null: false
+    t.boolean "scheduled_for_deletion", default: false, null: false
+    t.boolean "pending_account_setup", default: false, null: false
+    t.date "sync_start_date"
+    t.jsonb "raw_payload"
+    t.jsonb "raw_institution_payload"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_bunq_items_on_family_id"
+    t.index ["status"], name: "index_bunq_items_on_status"
   end
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -3126,6 +3173,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_120000) do
   add_foreign_key "budget_shares", "users", column: "viewer_id"
   add_foreign_key "budgets", "families"
   add_foreign_key "budgets", "users", on_delete: :cascade
+  add_foreign_key "bunq_accounts", "bunq_items"
+  add_foreign_key "bunq_items", "families"
   add_foreign_key "categories", "families"
   add_foreign_key "categorization_comparisons", "families"
   add_foreign_key "categorization_comparisons", "transactions", on_delete: :nullify

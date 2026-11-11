@@ -1,0 +1,62 @@
+<div id="bunq-providers-panel" class="space-y-4">
+  <% active_items = local_assigns[:bunq_items] || @bunq_items || Current.family.bunq_items.active.ordered %>
+
+  <%= render "settings/providers/setup_steps",
+             steps: [
+               t("bunq_items.provider_panel.step_1"),
+               t("bunq_items.provider_panel.step_2"),
+               t("bunq_items.provider_panel.step_3")
+             ] %>
+  <%= render DS::Alert.new(message: t("bunq_items.provider_panel.key_notice"), variant: :info) %>
+
+  <% error_message = local_assigns[:error_message] || @error_message %>
+  <% if error_message.present? %>
+    <%= render DS::Alert.new(message: error_message, variant: :error) %>
+  <% end %>
+
+  <% active_items.each do |item| %>
+    <%= render DS::Disclosure.new(variant: :card) do |disclosure| %>
+      <% disclosure.with_summary_content do %>
+        <div class="flex items-center gap-3">
+          <%= render ProviderLogo.new(provider_key: :bunq) %>
+          <div>
+            <p class="font-medium text-primary"><%= item.name %></p>
+            <p class="text-xs text-secondary"><%= t("bunq_items.provider_panel.environments.#{item.environment}") %></p>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="mt-4 space-y-4">
+        <div class="flex flex-wrap gap-2">
+          <%= render DS::Button.new(text: t("bunq_items.provider_panel.sync"), icon: "refresh-cw", variant: :outline,
+                                    href: sync_bunq_item_path(item, source: "panel"), method: :post, disabled: item.syncing?) %>
+          <%= render DS::Link.new(text: t("bunq_items.provider_panel.setup_accounts"), icon: "settings", variant: :secondary,
+                                  href: setup_accounts_bunq_item_path(item), frame: :modal) %>
+          <%= render DS::Button.new(text: t("bunq_items.provider_panel.disconnect"), icon: "trash-2", variant: :outline_destructive,
+                                    href: bunq_item_path(item), method: :delete,
+                                    data: { turbo_confirm: t("bunq_items.provider_panel.disconnect_confirm", name: item.name) }) %>
+        </div>
+
+        <%= styled_form_with model: item, url: bunq_item_path(item), scope: :bunq_item, namespace: dom_id(item),
+                             method: :patch, class: "space-y-3" do |form| %>
+          <%= hidden_field_tag :source, "panel" %>
+          <%= render "bunq_items/fields", form: form, item: item %>
+          <%= render DS::Button.new(text: t("bunq_items.provider_panel.update_connection"), type: "submit") %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= render "settings/providers/add_connection_heading", label: t("bunq_items.provider_panel.add_connection") %>
+  <% new_item = BunqItem.new(name: t("bunq_items.provider_panel.default_connection_name"), environment: "production") %>
+  <%= styled_form_with model: new_item, url: bunq_items_path, scope: :bunq_item, namespace: "new_bunq",
+                       class: "space-y-3" do |form| %>
+    <%= hidden_field_tag :source, "panel" %>
+    <%= render "bunq_items/fields", form: form, item: new_item %>
+    <%= form.select :environment,
+                    options_for_select([[t("bunq_items.provider_panel.environments.production"), "production"],
+                                        [t("bunq_items.provider_panel.environments.sandbox"), "sandbox"]], new_item.environment),
+                    {}, { label: t("bunq_items.provider_panel.environment_label") } %>
+    <%= render DS::Button.new(text: t("bunq_items.provider_panel.add_connection"), type: "submit") %>
+  <% end %>
+</div>

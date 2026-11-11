@@ -206,6 +206,7 @@ class Settings::ProvidersController < ApplicationController
       { key: "akahu",          title: "Akahu",           turbo_id: "akahu",          partial: "akahu_panel" },
       { key: "up",             title: "Up",              turbo_id: "up",             partial: "up_panel" },
       { key: "monobank",       title: "Monobank",        turbo_id: "monobank",       partial: "monobank_panel" },
+      { key: "bunq",           title: "bunq",            turbo_id: "bunq",           partial: "bunq_panel" },
       { key: "fio",            title: "Fio banka",       turbo_id: "fio",            partial: "fio_panel" },
       { key: "lunchflow",      title: "Lunch Flow",      turbo_id: "lunchflow",      partial: "lunchflow_panel" },
       { key: "redbark",        title: "Redbark",         turbo_id: "redbark",        partial: "redbark_panel" },
@@ -239,6 +240,7 @@ class Settings::ProvidersController < ApplicationController
       "akahu"          => "AkahuItem",
       "up"             => "UpItem",
       "monobank"       => "MonobankItem",
+      "bunq"           => "BunqItem",
       "fio"            => "FioItem",
       "simplefin"      => "SimplefinItem",
       "lunchflow"      => "LunchflowItem",
@@ -272,6 +274,8 @@ class Settings::ProvidersController < ApplicationController
         @up_items = Current.family.up_items.active.ordered
       when "monobank"
         @monobank_items = Current.family.monobank_items.active.ordered
+      when "bunq"
+        @bunq_items = Current.family.bunq_items.active.ordered
       when "fio"
         @fio_items = Current.family.fio_items.active.ordered
       when "simplefin"
@@ -334,6 +338,7 @@ class Settings::ProvidersController < ApplicationController
       @akahu_items = Current.family.akahu_items.active.ordered
       @up_items = Current.family.up_items.active.ordered
       @monobank_items = Current.family.monobank_items.active.ordered
+      @bunq_items = Current.family.bunq_items.active.ordered
       # Providers page only needs to know whether any SimpleFin/Lunchflow connections exist with valid credentials
       @simplefin_items = Current.family.simplefin_items.where.not(access_url: [ nil, "" ]).ordered.select(:id)
       @lunchflow_items = Current.family.lunchflow_items.where.not(api_key: [ nil, "" ]).ordered.select(:id)
@@ -389,6 +394,7 @@ class Settings::ProvidersController < ApplicationController
         "akahu"          => @akahu_items,
         "up"             => @up_items,
         "monobank"       => @monobank_items,
+        "bunq"           => @bunq_items,
         "fio"            => @fio_items,
         "simplefin"      => @simplefin_items,
         "lunchflow"      => @lunchflow_items,

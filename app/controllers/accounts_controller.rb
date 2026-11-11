@@ -27,6 +27,7 @@ class AccountsController < ApplicationController
     @akahu_items = visible_provider_items(family.akahu_items.ordered.with_attached_logo.includes(:akahu_accounts))
     @up_items = visible_provider_items(family.up_items.ordered.with_attached_logo.includes(:up_accounts))
     @monobank_items = visible_provider_items(family.monobank_items.ordered.with_attached_logo.includes(:monobank_accounts))
+    @bunq_items = visible_provider_items(family.bunq_items.active.ordered.with_attached_logo.includes(:bunq_accounts))
     @fio_items = visible_provider_items(family.fio_items.active.ordered.with_attached_logo.includes(:fio_accounts))
     @enable_banking_items = visible_provider_items(family.enable_banking_items.ordered.with_attached_logo)
     @truelayer_items = visible_provider_items(family.truelayer_items.connected.ordered.with_attached_logo.includes(:truelayer_accounts))
@@ -531,6 +532,7 @@ class AccountsController < ApplicationController
         @akahu_items,
         @up_items,
         @monobank_items,
+        @bunq_items,
         @fio_items,
         @enable_banking_items,
         @truelayer_items,
@@ -687,6 +689,11 @@ class AccountsController < ApplicationController
       @monobank_items.each do |item|
         latest_sync = item.latest_sync_record
         @monobank_sync_stats_map[item.id] = latest_sync&.sync_stats || {}
+      end
+
+      @bunq_sync_stats_map = {}
+      @bunq_items.each do |item|
+        @bunq_sync_stats_map[item.id] = item.latest_sync_record&.sync_stats || {}
       end
 
       # Enable Banking sync stats

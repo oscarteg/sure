@@ -1,0 +1,30 @@
+<%= turbo_frame_tag "modal" do %>
+  <%= render DS::Dialog.new do |dialog| %>
+    <% dialog.with_header(title: t(".title")) %>
+    <% dialog.with_body do %>
+      <div class="space-y-4">
+        <% if @api_error.present? %>
+          <%= render DS::Alert.new(message: @api_error, variant: :warning) %>
+        <% end %>
+        <% if @bunq_accounts.empty? %>
+          <p class="text-sm text-secondary"><%= t(".no_accounts") %></p>
+        <% else %>
+          <p class="text-sm text-secondary"><%= t(".description") %></p>
+          <%= styled_form_with url: complete_account_setup_bunq_item_path(@bunq_item), method: :post, scope: :account_types,
+                               data: { turbo_frame: "_top" }, class: "space-y-4" do |form| %>
+            <% @bunq_accounts.each do |bunq_account| %>
+              <%= render DS::Card.new(class: "gap-3") do %>
+                <p class="text-sm font-medium text-primary"><%= bunq_account.name %></p>
+                <p class="text-xs text-secondary"><%= format_money(Money.new(bunq_account.current_balance, bunq_account.currency)) %></p>
+                <%= form.select bunq_account.id,
+                                options_for_select([[t(".cash"), "Depository"], [t(".skip"), "skip"]], "Depository"),
+                                {}, { label: t(".account_type") } %>
+              <% end %>
+            <% end %>
+            <%= render DS::Button.new(text: t(".create_accounts"), type: "submit") %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

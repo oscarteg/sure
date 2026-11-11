@@ -7,6 +7,7 @@ class DataEnrichment < ApplicationRecord
     akahu: "akahu",
     bayes: "bayes",
     brex: "brex",
+    bunq: "bunq",
     coinstats: "coinstats",
     enable_banking: "enable_banking",
     fio: "fio",

@@ -67,6 +67,9 @@ module SettingsHelper
     when "monobank"
       return { status: :off } unless @monobank_items&.any?
       sync_based_summary(key)
+    when "bunq"
+      return { status: :off } unless @bunq_items&.any?
+      sync_based_summary(key)
     when "fio"
       return { status: :off } unless @fio_items&.any?
       sync_based_summary(key)

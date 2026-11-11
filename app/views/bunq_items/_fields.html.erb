@@ -1,0 +1,8 @@
+<%# locals: (form:, item:) %>
+
+<%= form.text_field :name, label: t("bunq_items.provider_panel.connection_name_label"), required: true %>
+<%= form.password_field :api_key,
+                        label: t("bunq_items.provider_panel.api_key_label"),
+                        placeholder: t(item.persisted? ? "bunq_items.provider_panel.keep_api_key" : "bunq_items.provider_panel.api_key_placeholder"),
+                        autocomplete: "new-password", required: item.new_record?, value: nil %>
+<%= form.date_field :sync_start_date, label: t("bunq_items.provider_panel.sync_start_date_label") %>

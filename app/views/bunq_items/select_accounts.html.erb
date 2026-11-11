@@ -1,0 +1,39 @@
+<%= turbo_frame_tag "modal" do %>
+  <%= render DS::Dialog.new do |dialog| %>
+    <% dialog.with_header(title: @account ? t("bunq_items.select_existing_account.title", account_name: @account.name) : t(".title")) %>
+    <% dialog.with_body do %>
+      <div class="space-y-4">
+        <% if @api_error.present? %>
+          <%= render DS::Alert.new(message: @api_error, variant: :warning) %>
+        <% end %>
+        <% if @bunq_accounts.empty? %>
+          <p class="text-sm text-secondary"><%= t(".no_accounts") %></p>
+        <% else %>
+          <%= form_with url: @account ? link_existing_account_bunq_items_path : link_accounts_bunq_items_path,
+                        method: :post, data: { turbo_frame: "_top" }, class: "space-y-4" do %>
+            <%= hidden_field_tag :bunq_item_id, @bunq_item.id %>
+            <%= hidden_field_tag :return_to, @return_to %>
+            <%= hidden_field_tag :account_id, @account.id if @account %>
+            <% @bunq_accounts.each do |bunq_account| %>
+              <%= render DS::Card.new do %>
+                <label class="flex items-start gap-3 cursor-pointer">
+                  <% if @account %>
+                    <%= radio_button_tag :bunq_account_id, bunq_account.id, false, required: true %>
+                  <% else %>
+                    <%= check_box_tag "account_ids[]", bunq_account.id, false, id: "bunq_account_#{bunq_account.id}" %>
+                  <% end %>
+                  <span class="text-sm text-primary"><%= bunq_account.name %> (<%= bunq_account.currency %>)</span>
+                </label>
+              <% end %>
+            <% end %>
+            <div class="flex justify-end gap-2">
+              <%= render DS::Link.new(text: t(".cancel"), href: @return_to || accounts_path, variant: :secondary,
+                                      data: { turbo_frame: "_top", action: "DS--dialog#close" }) %>
+              <%= render DS::Button.new(text: t(".link_accounts"), type: "submit") %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

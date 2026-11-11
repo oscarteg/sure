@@ -1,0 +1,9 @@
+one:
+  family: dylan_family
+  name: bunq
+  api_key: bunq-test-key
+  environment: sandbox
+  institution_id: bunq
+  institution_name: bunq
+  institution_domain: bunq.com
+  status: good

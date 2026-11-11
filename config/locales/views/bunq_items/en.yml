@@ -1,0 +1,72 @@
+---
+en:
+  providers:
+    bunq:
+      name: bunq
+      description: Connect bunq accounts and import balances and booked payments.
+  settings:
+    providers:
+      taglines:
+        bunq: Sync bunq bank accounts with a personal API key.
+  bunq_items:
+    link_failed: No accounts were linked. Check your selection and try again.
+    unsupported_account: Select an unlinked cash account with the same currency.
+    provider_panel:
+      default_connection_name: bunq Connection
+      add_connection: Add bunq connection
+      update_connection: Update connection
+      connection_name_label: Connection name
+      api_key_label: bunq API key
+      api_key_placeholder: Paste a new bunq API key
+      keep_api_key: Leave blank to keep the existing key
+      sync_start_date_label: Import payments from (optional)
+      environment_label: Environment
+      environments:
+        production: Live banking
+        sandbox: Sandbox (test data)
+      setup_accounts: Set up accounts
+      sync: Sync
+      disconnect: Disconnect
+      disconnect_confirm: "Disconnect %{name}? Your Sure accounts and transactions will be kept."
+      step_1: Create a new API key in the bunq app for this Sure connection.
+      step_2: Paste the key below and choose live banking or the sandbox.
+      step_3: Choose the accounts to import, or link an existing cash account from its connection settings.
+      key_notice: Sure only reads your accounts and booked payments. Use a fresh API key rather than a key already used by another device. bunq binds the connection to your server's outgoing IP address.
+    create:
+      success: bunq connection saved.
+    update:
+      success: bunq connection updated.
+    destroy:
+      success: Scheduled bunq connection for deletion.
+      failed: Could not disconnect the bunq connection.
+    setup_accounts:
+      title: Set up bunq accounts
+      description: Add accounts to Sure, or skip accounts you do not want to track.
+      api_error: Could not refresh bunq accounts. Accounts saved by the last sync are shown instead.
+      no_accounts: No accounts need setup. Sync the connection to discover new accounts.
+      account_type: Account type
+      cash: Cash
+      skip: Skip
+      create_accounts: Create accounts
+    complete_account_setup:
+      success:
+        zero: No bunq accounts were created.
+        one: Created 1 bunq account.
+        other: "Created %{count} bunq accounts."
+    select_accounts:
+      title: Link bunq accounts
+      no_accounts: No compatible, unlinked bunq accounts were found.
+      cancel: Cancel
+      link_accounts: Link accounts
+    select_existing_account:
+      title: "Link bunq to %{account_name}"
+    link_existing_account:
+      success: "Linked bunq to %{account_name}."
+    bunq_item:
+      deletion_in_progress: Deletion in progress
+      syncing: Syncing
+      error: Sync failed
+      status: "Synced %{timestamp} ago"
+      status_never: Never synced
+      delete: Disconnect
+      setup_action: Set up accounts

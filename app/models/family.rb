@@ -10,6 +10,7 @@ class Family < ApplicationRecord
   include IndexaCapitalConnectable, IbkrConnectable, WiseConnectable
   include UpConnectable
   include MonobankConnectable
+  include BunqConnectable
   include Trading212Connectable
   include TradeRepublicConnectable
   include QuestradeConnectable

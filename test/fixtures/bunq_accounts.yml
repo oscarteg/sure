@@ -1,0 +1,11 @@
+checking:
+  bunq_item: one
+  account_id: "42"
+  name: Spending
+  currency: EUR
+  current_balance: 123.45
+  account_status: ACTIVE
+  account_type: MonetaryAccountBank
+  provider: bunq
+  ignored: false
+  raw_transactions_payload: []
