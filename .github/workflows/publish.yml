@@ -137,6 +137,9 @@ jobs:
               [[ "$alpha" != true ]] || echo 'type=raw,value=latest'
             else
               echo "type=raw,value=sha-$(git rev-parse HEAD)"
+              if [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/main ]]; then
+                echo 'type=raw,value=main'
+              fi
               if [[ "$GITHUB_EVENT_NAME" == schedule ]]; then
                 echo 'type=schedule,pattern=nightly'
                 echo "type=raw,value=$version"
