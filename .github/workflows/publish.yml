@@ -29,9 +29,6 @@ on:
       - 'v*'
     branches:
       - main
-    paths-ignore:
-      - 'charts/**'
-      - 'mobile/**'
   schedule:
     - cron: '30 1 * * *'
 
